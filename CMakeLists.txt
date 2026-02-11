@@ -6,6 +6,7 @@ endif()
 find_package(ament_cmake REQUIRED)
 find_package(rclcpp REQUIRED)
 find_package(std_msgs REQUIRED)
+find_package(geometry_msgs REQUIRED)
 add_executable(effectors_node src/effectors_node.cpp)
 target_include_directories(effectors_node PUBLIC
   $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
@@ -15,6 +16,7 @@ ament_target_dependencies(
   effectors_node
   "rclcpp"
   "std_msgs"
+  "geometry_msgs"
 )
 install(TARGETS effectors_node
   DESTINATION lib/${PROJECT_NAME})

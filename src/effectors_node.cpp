@@ -1,7 +1,7 @@
 #include <memory>
-#include <rclcpp/rclcpp.hpp>
-#include "std_msgs/msg/string.hpp"
 
+#include "geometry_msgs/msg/twist.hpp"
+#include "rclcpp/rclcpp.hpp"
 
 class EffectorsNode : public rclcpp::Node
 {
@@ -9,19 +9,23 @@ public:
   EffectorsNode()
   : Node("argus_effectors")
   {
-    sub_ = create_subscription<std_msgs::msg::String>(
-      "/argus/effectors/cmd",
+    sub_ = create_subscription<geometry_msgs::msg::Twist>(
+      "/cmd_vel",
       10,
-      [this](const std_msgs::msg::String::SharedPtr msg)
+      [this](const geometry_msgs::msg::Twist::SharedPtr msg)
       {
-        RCLCPP_INFO(get_logger(), "received cmd: %s", msg->data.c_str());
+        RCLCPP_INFO(
+          get_logger(),
+          "cmd_vel: linear.x=%.3f angular.z=%.3f",
+          msg->linear.x,
+          msg->angular.z);
       });
 
-    RCLCPP_INFO(get_logger(), "argus_effectors online");
+    RCLCPP_INFO(get_logger(), "argus_effectors online (subscribed to /cmd_vel)");
   }
 
 private:
-  rclcpp::Subscription<std_msgs::msg::String>::SharedPtr sub_;
+  rclcpp::Subscription<geometry_msgs::msg::Twist>::SharedPtr sub_;
 };
 
 int main(int argc, char ** argv)
@@ -31,3 +35,4 @@ int main(int argc, char ** argv)
   rclcpp::shutdown();
   return 0;
 }
+
